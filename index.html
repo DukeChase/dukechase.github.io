@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: #f6f8fa;
+            color: #24292e;
+            line-height: 1.5;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background-color: #24292e;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-search {
+            position: relative;
+        }
+
+        .nav-search input {
+            background-color: #24292e;
+            border: 1px solid #444d56;
+            border-radius: 6px;
+            color: white;
+            padding: 7px 12px 7px 32px;
+            width: 300px;
+        }
+
+        .nav-search i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6a737d;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #e1e4e8;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            color: #e1e4e8;
+            font-size: 16px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* 主要内容区域 */
+        .container {
+            display: flex;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
+            gap: 24px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 296px;
+            flex-shrink: 0;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-username {
+            color: #586069;
+            margin-bottom: 16px;
+        }
+
+        .profile-bio {
+            color: #24292e;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px 0;
+            border-top: 1px solid #e1e4e8;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-weight: 600;
+            display: block;
+        }
+
+        .stat-label {
+            color: #586069;
+            font-size: 12px;
+        }
+
+        .profile-details {
+            margin-top: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #586069;
+        }
+
+        .detail-item i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 6px 6px 0 0;
+            border: 1px solid #e1e4e8;
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid #f9826c;
+            font-weight: 600;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid #e1e4e8;
+            border-radius: 0 0 6px 6px;
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 8px;
+        }
+
+        /* 项目卡片 */
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .repo-card {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            transition: box-shadow 0.2s;
+        }
+
+        .repo-card:hover {
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .repo-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .repo-name {
+            color: #0366d6;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .repo-name:hover {
+            text-decoration: underline;
+        }
+
+        .repo-public {
+            background-color: #e1e4e8;
+            color: #586069;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 2em;
+            margin-left: 8px;
+        }
+
+        .repo-desc {
+            color: #586069;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .repo-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #586069;
+        }
+
+        .repo-stat {
+            display: flex;
+            align-items: center;
+        }
+
+        .repo-stat i {
+            margin-right: 4px;
+        }
+
+        .repo-lang {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .repo-updated {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #586069;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .nav-search input {
+                width: 200px;
+            }
+
+            .repo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="nav-logo">GitHub</a>
+            <div class="nav-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search or jump to...">
+            </div>
+            <div class="nav-links">
+                <a href="#">Pull requests</a>
+                <a href="#">Issues</a>
+                <a href="#">Marketplace</a>
+                <a href="#">Explore</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <i class="fas fa-bell nav-icon"></i>
+            <i class="fas fa-plus nav-icon"></i>
+            <img src="https://placehold.co/32x32/0969da/ffffff?text=U" alt="Avatar" class="avatar">
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <img src="https://placehold.co/100x100/0969da/ffffff?text=User" alt="Avatar" class="profile-avatar">
+                    <h1 class="profile-name">用户名</h1>
+                    <p class="profile-username">username</p>
+                </div>
+                <p class="profile-bio">前端开发工程师，热爱开源技术和用户体验设计。专注于React和Vue.js开发。</p>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">127</span>
+                        <span class="stat-label">关注者</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">89</span>
+                        <span class="stat-label">关注中</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">23</span>
+                        <span class="stat-label">Star</span>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <i class="fas fa-building"></i>
+                        <span>科技公司</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-location-dot"></i>
+                        <span>北京, 中国</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-link"></i>
+                        <span>https://username.dev</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-twitter"></i>
+                        <span>@username</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>user@example.com</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="tabs">
+                <div class="tab active">
+                    <i class="fas fa-book"></i> 概览
+                </div>
+                <div class="tab">
+                    <i class="fas fa-repo"></i> 仓库
+                </div>
+                <div class="tab">
+                    <i class="fas fa-project-diagram"></i> 项目
+                </div>
+                <div class="tab">
+                    <i class="fas fa-star"></i> Star
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> Starred
+                </h2>
+                <div class="repo-grid">
+                    <!-- 项目卡片 1 -->
+                    <div class="repo-card">
+                        <div class="repo-header">
+                            <a href="#" class="repo-name">awesome-react-project</a>
+                            <span class="repo-public">Public</span>
+                        </div>
+                        <p class="repo-desc">一个基于React的现代化Web应用，包含完整的用户认证和数据管理功能。</p>
+                        <div class="repo-stats">
+                            <div class="repo-stat">
+                                <span class="repo-lang" style="background-color: #61dafb;"></span>
+                                JavaScript
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-star"></i>
+                                1.2k
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-code-branch"></i>
+                                89
+                            </div>
+                        </div>
+                        <div class="repo-updated">
+                            更新于 3天前
+                        </div>
+                    </div>
+
+                    <!-- 项目卡片 2 -->
+                    <div class="repo-card">
+                        <div class="repo-header">
+                            <a href="#" class="repo-name">vue-dashboard</a>
+                            <span class="repo-public">Public</span>
+                        </div>
+                        <p class="repo-desc">使用Vue 3和Element Plus构建的管理后台模板，支持暗色主题。</p>
+                        <div class="repo-stats">
+                            <div class="repo-stat">
+                                <span class="repo-lang" style="background-color: #42b883;"></span>
+                                Vue
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-star"></i>
+                                856
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-code-branch"></i>
+                                156
+                            </div>
+                        </div>
+                        <div class="repo-updated">
+                            更新于 1周前
+                        </div>
+                    </div>
+
+                    <!-- 项目卡片 3 -->
+                    <div class="repo-card">
+                        <div class="repo-header">
+                            <a href="#" class="repo-name">node-api-server</a>
+                            <span class="repo-public">Public</span>
+                        </div>
+                        <p class="repo-desc">基于Node.js和Express构建的RESTful API服务器，支持JWT认证。</p>
+                        <div class="repo-stats">
+                            <div class="repo-stat">
+                                <span class="repo-lang" style="background-color: #339933;"></span>
+                                Node.js
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-star"></i>
+                                432
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-code-branch"></i>
+                                67
+                            </div>
+                        </div>
+                        <div class="repo-updated">
+                            更新于 2周前
+                        </div>
+                    </div>
+
+                    <!-- 项目卡片 4 -->
+                    <div class="repo-card">
+                        <div class="repo-header">
+                            <a href="#" class="repo-name">css-framework</a>
+                            <span class="repo-public">Public</span>
+                        </div>
+                        <p class="repo-desc">轻量级CSS框架，提供现代化的组件和响应式布局系统。</p>
+                        <div class="repo-stats">
+                            <div class="repo-stat">
+                                <span class="repo-lang" style="background-color: #1572B6;"></span>
+                                CSS
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-star"></i>
+                                2.1k
+                            </div>
+                            <div class="repo-stat">
+                                <i class="fas fa-code-branch"></i>
+                                234
+                            </div>
+                        </div>
+                        <div class="repo-updated">
+                            更新于 1个月前
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 简单的标签切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有活动状态
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // 添加当前活动状态
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
