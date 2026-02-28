@@ -242,6 +242,15 @@ body {
     text-align: center;
 }
 
+.detail-item a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.detail-item a:hover {
+    text-decoration: underline;
+}
+
 .main-content {
     flex: 1;
 }
@@ -335,133 +344,144 @@ body {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* 仓库容器 */
-.repo-container {
-    width: 100%;
-    transition: all 0.3s ease;
+/* 仓库列表容器 */
+.repo-list {
+    display: contents;
 }
 
-.repo-grid {
+.repo-list--grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
-    width: 100%;
 }
 
+.repo-list--list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 仓库卡片基础样式 */
 .repo-card {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 16px;
-    transition: box-shadow 0.2s, background-color 0.3s, border-color 0.3s;
     background: var(--bg-secondary);
+    transition: box-shadow 0.2s, background-color 0.3s, border-color 0.3s;
 }
 
 .repo-card:hover {
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
-.repo-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.repo-name {
+.repo-card__name {
     color: var(--accent-color);
     font-weight: 600;
     text-decoration: none;
     font-size: 16px;
 }
 
-.repo-name:hover {
+.repo-card__name:hover {
     text-decoration: underline;
 }
 
-.repo-public {
-    background-color: var(--border-color);
+.repo-card__badge {
+    background-color: transparent;
     color: var(--text-secondary);
     font-size: 12px;
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 2em;
+    border: 1px solid var(--border-color);
     margin-left: 8px;
 }
 
-.repo-desc {
+.repo-card__desc {
     color: var(--text-secondary);
     font-size: 14px;
-    margin-bottom: 12px;
+    line-height: 1.5;
 }
 
-.repo-stats {
-    display: flex;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.repo-stat {
-    display: flex;
-    align-items: center;
-}
-
-.repo-stat i {
-    margin-right: 4px;
-}
-
-.repo-lang {
+.repo-card__lang-dot {
     display: inline-block;
     width: 12px;
     height: 12px;
     border-radius: 50%;
     margin-right: 4px;
+    vertical-align: middle;
 }
 
-.repo-updated {
-    margin-top: 12px;
+.repo-card__stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.repo-card__updated {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* 网格视图卡片 */
+.repo-card--grid .repo-card__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.repo-card--grid .repo-card__desc {
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.repo-card--grid .repo-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.repo-card--grid .repo-card__stats {
+    display: flex;
+    gap: 16px;
     font-size: 12px;
     color: var(--text-secondary);
 }
 
-/* 列表视图 */
-.repo-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.repo-list .repo-card {
+/* 列表视图卡片 */
+.repo-card--list {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 24px;
 }
 
-.repo-list .repo-header {
-    flex: 0 0 auto;
-    margin-bottom: 0;
-    min-width: 200px;
+.repo-card--list .repo-card__main {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 220px;
 }
 
-.repo-list .repo-desc {
-    flex: 1 1 auto;
-    margin-bottom: 0;
-    color: var(--text-secondary);
-    font-size: 14px;
+.repo-card--list .repo-card__badge {
+    align-self: center;
+}
+
+.repo-card--list .repo-card__desc {
+    flex: 1;
+    margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.repo-list .repo-stats {
-    flex: 0 0 auto;
-    justify-content: flex-end;
-    margin-bottom: 0;
-}
-
-.repo-list .repo-updated {
-    flex: 0 0 auto;
-    margin-top: 0;
-    min-width: 100px;
-    text-align: right;
+.repo-card--list .repo-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--text-secondary);
 }
 
 .overview-content {
@@ -489,6 +509,15 @@ body {
     border-bottom: none;
 }
 
+.overview-list a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.overview-list a:hover {
+    text-decoration: underline;
+}
+
 .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -505,6 +534,29 @@ body {
     font-size: 16px;
 }
 
+.repo-loading,
+.repo-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 48px 24px;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.repo-loading i {
+    font-size: 20px;
+}
+
+.repo-error {
+    color: #cb2431;
+}
+
+.repo-error i {
+    font-size: 20px;
+}
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -519,7 +571,7 @@ body {
         width: 200px;
     }
 
-    .repo-grid {
+    .repo-list--grid {
         grid-template-columns: 1fr;
     }
     
@@ -527,22 +579,22 @@ body {
         display: none;
     }
     
-    /* 移动端列表视图适配 */
-    .repo-list .repo-card {
+    .repo-card--list {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
-        padding: 16px;
     }
     
-    .repo-list .repo-desc {
+    .repo-card--list .repo-card__main {
+        min-width: auto;
+    }
+    
+    .repo-card--list .repo-card__desc {
         white-space: normal;
     }
     
-    .repo-list .repo-stats,
-    .repo-list .repo-updated {
-        width: 100%;
-        justify-content: flex-start;
-        text-align: left;
+    .repo-card--list .repo-card__meta {
+        flex-wrap: wrap;
+        gap: 12px;
     }
 }
