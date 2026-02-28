@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import MainContent from './components/MainContent'
+import ParticleBackground from './components/ParticleBackground'
 import './styles.css'
 
 function App() {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light'
+    return localStorage.getItem('theme') || 'dark'
   })
 
   useEffect(() => {
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <div className="app">
+      <ParticleBackground />
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <div className="container">
         <Sidebar />

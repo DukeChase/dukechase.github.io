@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import RepoCard from './RepoCard'
+import Contributions from './Contributions'
 import config from '../config'
 
 const langColors = {
@@ -137,6 +138,7 @@ function MainContent() {
           )}
         </ul>
       </div>
+      <Contributions />
     </div>
   )
 

@@ -1,8 +1,68 @@
+import { useState, useEffect } from 'react'
 import config from '../config'
 
 function Sidebar() {
-  const { profile, contact } = config
+  const { profile, contact, github } = config
   
+  const [stats, setStats] = useState({
+    followers: profile.stats.followers,
+    following: profile.stats.following,
+    stars: profile.stats.stars
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      try {
+        setLoading(true)
+        
+        const userResponse = await fetch(
+          `https://api.github.com/users/${github.username}`,
+          {
+            headers: {
+              'Accept': 'application/vnd.github+json',
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
+          }
+        )
+        
+        if (!userResponse.ok) {
+          throw new Error(`HTTP error! status: ${userResponse.status}`)
+        }
+        
+        const userData = await userResponse.json()
+        
+        const reposResponse = await fetch(
+          `https://api.github.com/users/${github.username}/repos?per_page=100`,
+          {
+            headers: {
+              'Accept': 'application/vnd.github+json',
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
+          }
+        )
+        
+        let totalStars = 0
+        if (reposResponse.ok) {
+          const reposData = await reposResponse.json()
+          totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0)
+        }
+        
+        setStats({
+          followers: userData.followers,
+          following: userData.following,
+          stars: totalStars
+        })
+      } catch (err) {
+        console.error('Failed to fetch user stats:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserStats()
+  }, [github.username])
+
   return (
     <aside className="sidebar">
       <div className="profile-card">
@@ -14,15 +74,15 @@ function Sidebar() {
         <p className="profile-bio">{profile.bio}</p>
         <div className="profile-stats">
           <div className="stat-item">
-            <span className="stat-number">{profile.stats.followers}</span>
+            <span className="stat-number">{loading ? '...' : stats.followers}</span>
             <span className="stat-label">关注者</span>
           </div>
           <div className="stat-item">
-            <span className="stat-number">{profile.stats.following}</span>
+            <span className="stat-number">{loading ? '...' : stats.following}</span>
             <span className="stat-label">关注中</span>
           </div>
           <div className="stat-item">
-            <span className="stat-number">{profile.stats.stars}</span>
+            <span className="stat-number">{loading ? '...' : stats.stars}</span>
             <span className="stat-label">Star</span>
           </div>
         </div>
