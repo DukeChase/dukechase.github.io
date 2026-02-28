@@ -18,7 +18,7 @@ const config = {
   
   contact: {
     company: '',
-    location: 'China',
+    location: 'Fuzhou, Fujian, China',
     website: 'https://dukechase.github.io',
     email: 'chiphuang1433@gmail.com',
     twitter: 'dukechase199978'
